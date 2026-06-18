@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Container,
   Row,
@@ -47,9 +47,9 @@ const Profile = () => {
     } else if (userInfo?.userId) {
       fetchUserStats();
     }
-  }, [isAuthenticated, navigate, userInfo]);
+  }, [isAuthenticated, navigate, userInfo, fetchUserStats]);
 
-  const fetchUserStats = async () => {
+  const fetchUserStats = useCallback(async () => {
     try {
       const response = await axios.get(USER_API.STATS(userInfo.userId));
       if (response.data.success) {
@@ -58,7 +58,7 @@ const Profile = () => {
     } catch (_err) {
       console.error("Error fetching user stats:", _err);
     }
-  };
+  }, [userInfo?.userId]);
 
   const handleChange = (e) => {
     setFormData({
@@ -83,7 +83,7 @@ const Profile = () => {
         setIsEditing(false);
         setLoading(false);
       }, 1000);
-    } catch (err) {
+    } catch {
       setError("Failed to update profile. Please try again.");
       setLoading(false);
     }

@@ -166,7 +166,7 @@ export const handlers = [
   }),
 
   // ── User stats endpoint ───────────────────────────────────────────────────
-  http.get(`${BASE_URL}/auth/stats/:userId`, ({ params }) => {
+  http.get(`${BASE_URL}/auth/stats/:userId`, () => {
     return HttpResponse.json({
       success: true,
       data: {
