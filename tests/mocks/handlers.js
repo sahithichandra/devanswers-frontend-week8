@@ -106,7 +106,7 @@ export const handlers = [
   // ── Answer endpoints ──────────────────────────────────────────────────────
   http.post(
     `${BASE_URL}/answers/question/:questionId`,
-    async ({ request, params }) => {
+    async ({ request }) => {
       const body = await request.json();
 
       const newAnswer = {
@@ -123,8 +123,8 @@ export const handlers = [
     },
   ),
 
-  http.post(`${BASE_URL}/answers/:id/upvote`, ({ params }) => {
-    const answer = mockAnswers.find((a) => a._id === params.id);
+  http.post(`${BASE_URL}/answers/:id/upvote`, ({ params: { id } }) => {
+    const answer = mockAnswers.find((a) => a._id === id);
 
     if (!answer) {
       return HttpResponse.json(
@@ -138,8 +138,8 @@ export const handlers = [
     });
   }),
 
-  http.post(`${BASE_URL}/answers/:id/downvote`, ({ params }) => {
-    const answer = mockAnswers.find((a) => a._id === params.id);
+  http.post(`${BASE_URL}/answers/:id/downvote`, ({ params: { id } }) => {
+    const answer = mockAnswers.find((a) => a._id === id);
 
     if (!answer) {
       return HttpResponse.json(

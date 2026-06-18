@@ -24,7 +24,6 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const handleCloseMobileMenu = () => setShowMobileMenu(false);
-  const handleShowMobileMenu = () => setShowMobileMenu(true);
 
   const handleLogin = () => {
     navigate("/login");

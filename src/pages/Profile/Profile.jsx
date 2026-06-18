@@ -55,8 +55,8 @@ const Profile = () => {
       if (response.data.success) {
         setStats(response.data.data);
       }
-    } catch (err) {
-      console.error("Error fetching user stats:", err);
+    } catch (_err) {
+      console.error("Error fetching user stats:", _err);
     }
   };
 
