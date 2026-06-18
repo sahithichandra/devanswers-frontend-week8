@@ -98,7 +98,9 @@ export const voteAnswer = createAsyncThunk(
       return await downvoteAnswer(answer._id, token);
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "Failed to vote answer",
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to vote answer",
       );
     }
   },
@@ -109,7 +111,11 @@ export const postAnswer = createAsyncThunk(
   async ({ questionId, answerText }, { rejectWithValue, getState }) => {
     try {
       const userInfo = getState().user.userInfo;
-      return await createAnswerForQuestion(questionId, answerText, userInfo.token);
+      return await createAnswerForQuestion(
+        questionId,
+        answerText,
+        userInfo.token,
+      );
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||
@@ -202,10 +208,12 @@ const questionSlice = createSlice({
           );
 
           if (answerIndex !== -1) {
-            state.currentQuestion.answers[answerIndex].upvotes = updatedAnswer.upvotes;
+            state.currentQuestion.answers[answerIndex].upvotes =
+              updatedAnswer.upvotes;
             state.currentQuestion.answers[answerIndex].downvotes =
               updatedAnswer.downvotes;
-            state.currentQuestion.answers[answerIndex].voteCount = updatedAnswer.voteCount;
+            state.currentQuestion.answers[answerIndex].voteCount =
+              updatedAnswer.voteCount;
           }
         }
       })
@@ -225,7 +233,8 @@ const questionSlice = createSlice({
             state.currentQuestion.answers = [];
           }
           state.currentQuestion.answers.push(action.payload);
-          state.currentQuestion.answerCount = state.currentQuestion.answers.length;
+          state.currentQuestion.answerCount =
+            state.currentQuestion.answers.length;
         }
       })
       .addCase(postAnswer.rejected, (state, action) => {

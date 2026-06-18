@@ -1,36 +1,36 @@
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from "msw";
 import {
   mockUsers,
   mockQuestions,
   mockAnswers,
   mockTags,
   mockAuthResponse,
-} from './mockData';
+} from "./mockData";
 
-const BASE_URL = 'http://localhost:3000/api';
+const BASE_URL = "http://localhost:3000/api";
 
 export const handlers = [
   // ── Auth endpoints ────────────────────────────────────────────────────────
   http.post(`${BASE_URL}/auth/login`, async ({ request }) => {
     const body = await request.json();
 
-    if (body.email === 'alice@example.com' && body.password === 'password123') {
+    if (body.email === "alice@example.com" && body.password === "password123") {
       return HttpResponse.json({ data: mockAuthResponse.login });
     }
 
     return HttpResponse.json(
-      { message: 'Invalid email or password' },
-      { status: 401 }
+      { message: "Invalid email or password" },
+      { status: 401 },
     );
   }),
 
   http.post(`${BASE_URL}/auth/register`, async ({ request }) => {
     const body = await request.json();
 
-    if (body.email === 'existing@example.com') {
+    if (body.email === "existing@example.com") {
       return HttpResponse.json(
-        { message: 'Email already exists' },
-        { status: 400 }
+        { message: "Email already exists" },
+        { status: 400 },
       );
     }
 
@@ -47,8 +47,8 @@ export const handlers = [
 
     if (!question) {
       return HttpResponse.json(
-        { message: 'Question not found' },
-        { status: 404 }
+        { message: "Question not found" },
+        { status: 404 },
       );
     }
 
@@ -77,7 +77,10 @@ export const handlers = [
     const question = mockQuestions.find((q) => q._id === params.id);
 
     if (!question) {
-      return HttpResponse.json({ message: 'Question not found' }, { status: 404 });
+      return HttpResponse.json(
+        { message: "Question not found" },
+        { status: 404 },
+      );
     }
 
     return HttpResponse.json({
@@ -89,7 +92,10 @@ export const handlers = [
     const question = mockQuestions.find((q) => q._id === params.id);
 
     if (!question) {
-      return HttpResponse.json({ message: 'Question not found' }, { status: 404 });
+      return HttpResponse.json(
+        { message: "Question not found" },
+        { status: 404 },
+      );
     }
 
     return HttpResponse.json({
@@ -98,27 +104,33 @@ export const handlers = [
   }),
 
   // ── Answer endpoints ──────────────────────────────────────────────────────
-  http.post(`${BASE_URL}/answers/question/:questionId`, async ({ request, params }) => {
-    const body = await request.json();
+  http.post(
+    `${BASE_URL}/answers/question/:questionId`,
+    async ({ request, params }) => {
+      const body = await request.json();
 
-    const newAnswer = {
-      _id: `answer-${Date.now()}`,
-      answerText: body.answerText,
-      author: { _id: body.author, name: mockUsers.user1.name },
-      voteCount: 0,
-      upvotes: [],
-      downvotes: [],
-      createdAt: new Date().toISOString(),
-    };
+      const newAnswer = {
+        _id: `answer-${Date.now()}`,
+        answerText: body.answerText,
+        author: { _id: body.author, name: mockUsers.user1.name },
+        voteCount: 0,
+        upvotes: [],
+        downvotes: [],
+        createdAt: new Date().toISOString(),
+      };
 
-    return HttpResponse.json({ data: newAnswer }, { status: 201 });
-  }),
+      return HttpResponse.json({ data: newAnswer }, { status: 201 });
+    },
+  ),
 
   http.post(`${BASE_URL}/answers/:id/upvote`, ({ params }) => {
     const answer = mockAnswers.find((a) => a._id === params.id);
 
     if (!answer) {
-      return HttpResponse.json({ message: 'Answer not found' }, { status: 404 });
+      return HttpResponse.json(
+        { message: "Answer not found" },
+        { status: 404 },
+      );
     }
 
     return HttpResponse.json({
@@ -130,7 +142,10 @@ export const handlers = [
     const answer = mockAnswers.find((a) => a._id === params.id);
 
     if (!answer) {
-      return HttpResponse.json({ message: 'Answer not found' }, { status: 404 });
+      return HttpResponse.json(
+        { message: "Answer not found" },
+        { status: 404 },
+      );
     }
 
     return HttpResponse.json({
@@ -145,7 +160,7 @@ export const handlers = [
 
   http.get(`${BASE_URL}/tags/:tagId/questions`, ({ params }) => {
     const questions = mockQuestions.filter((q) =>
-      q.tags.some((t) => t._id === params.tagId)
+      q.tags.some((t) => t._id === params.tagId),
     );
     return HttpResponse.json({ data: questions });
   }),
